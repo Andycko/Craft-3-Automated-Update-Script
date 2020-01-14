@@ -1,0 +1,55 @@
+#!/bin/bash
+
+#directory where all websites are located
+PARENT="/Users/$USER/Documents/test/*"
+
+#looping through the parent directory to see all subdirectories
+for directory in $PARENT
+do
+    DIR=$(basename $directory)
+
+    #TODO - decide if the bin folder needs to be in the folder with all websites, or we will add this script to the global bin folder
+    if [ $DIR != "bin" ]; then
+        cd $directory
+        
+        #check if git branch is master, if yes give warning & terminate
+        BRANCH=$(git rev-parse --abbrev-ref HEAD)
+        
+        if [ $BRANCH = "master" ]; then
+            echo "$DIR"
+            echo " ------------------------------------------------------------------------------"
+            echo "| You are currently on the MASTER branch, consider changing to develop/staging |"
+            echo " ------------------------------------------------------------------------------"
+            echo ""
+        else
+            git pull
+            #composer install -n -q
+            if ./craft update/update -f --backup 0 --interactive 0; then
+                git add composer.json
+                git add composer.lock
+                git commit -m "Updated Craft CMS & Plugins"
+                if git push; then
+                    echo ""
+                    echo "************************"
+                    echo "*  ${DIR} is updated"
+                    echo "************************"
+                    echo ""
+                else
+                    echo ""
+                    echo " -------------------"
+                    echo "|  GIT PUSH failed  |"
+                    echo " -------------------"
+                    echo ""
+                fi
+            else
+                echo ""
+                echo " -----------------------"
+                echo "|  CRAFT UPDATE failed  |"
+                echo " -----------------------"
+                echo ""
+            fi 
+        fi
+    fi
+
+
+done
