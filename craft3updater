@@ -23,7 +23,7 @@ do
             echo ""
         else
             git pull
-            #composer install -n -q
+            composer install -n -q
             if ./craft update/update -f --backup 0 --interactive 0; then
                 git add composer.json
                 git add composer.lock
