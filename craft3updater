@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #directory where all websites are located
-PARENT="/Users/$USER/Documents/test/*"
+PARENT=$(pwd)/*
 
 #looping through the parent directory to see all subdirectories
 for directory in $PARENT
@@ -10,36 +10,43 @@ do
 
     #TODO - decide if the bin folder needs to be in the folder with all websites, or we will add this script to the global bin folder
     if [ $DIR != "bin" ]; then
-        cd $directory
-        
+        cd $directory     
         #check if git branch is master, if yes give warning & terminate
         BRANCH=$(git rev-parse --abbrev-ref HEAD)
-        
+
         if [ $BRANCH = "master" ]; then
             echo "$DIR"
             echo " ------------------------------------------------------------------------------"
             echo "| You are currently on the MASTER branch, consider changing to develop/staging |"
             echo " ------------------------------------------------------------------------------"
             echo ""
+
         else
             git pull
-            composer install -n -q
+            #composer install without any output and user interactions
+            composer.phar install -n -q
+
             if ./craft update/update -f --backup 0 --interactive 0; then
+                #adding only files that change after an update, so this commit does not affect anything else
                 git add composer.json
                 git add composer.lock
                 git commit -m "Updated Craft CMS & Plugins"
+
                 if git push; then
                     echo ""
-                    echo "************************"
-                    echo "*  ${DIR} is updated"
-                    echo "************************"
+                    echo "***********************"
+                    echo "  ${DIR} is updated"
+                    echo "***********************"
                     echo ""
+                    echo ""
+
                 else
                     echo ""
                     echo " -------------------"
                     echo "|  GIT PUSH failed  |"
                     echo " -------------------"
                     echo ""
+
                 fi
             else
                 echo ""
@@ -47,6 +54,7 @@ do
                 echo "|  CRAFT UPDATE failed  |"
                 echo " -----------------------"
                 echo ""
+
             fi 
         fi
     fi
