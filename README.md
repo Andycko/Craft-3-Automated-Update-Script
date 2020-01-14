@@ -12,7 +12,7 @@ Could be used in a cronjob to update **Craft 3** websites on regular basis as th
 
 ### 2. Make it an executable
   * For this script to run, it needs permisions to be executed, therefore we need to give those by this command:
-    * chmod u+x /usr/local/bin/craft3updater
+    * `chmod u+x /usr/local/bin/craft3updater`
 
 ### 3. Add to the PATH
   * For your script to be executable from anywhere whithout the need to write the whole path, you need to export it to your PATH:
