@@ -8,7 +8,7 @@ Could be used in a cronjob to update **Craft 3** websites on regular basis as th
 ## Instructions:
 
 ### 1. Place script
-  * Place this script in your /usr/local/bin/ folder
+  * Place this script in your `/usr/local/bin/` folder
 
 ### 2. Make it an executable
   * For this script to run, it needs permisions to be executed, therefore we need to give those by this command:
