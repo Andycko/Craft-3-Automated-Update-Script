@@ -26,7 +26,7 @@ do
             #composer install without any output and user interactions
             composer.phar install -n -q
 
-            if ./craft update/update -f --backup 0 --interactive 0; then
+            if ./craft update/update all -f --backup 0 --interactive 0; then
                 #adding only files that change after an update, so this commit does not affect anything else
                 git add composer.json
                 git add composer.lock
