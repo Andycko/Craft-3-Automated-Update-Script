@@ -8,7 +8,7 @@ Could be used in a cronjob to update **Craft 3** websites on regular basis as th
 ## Instructions:
 
 ### 1. Make sure to have Craft3 setup correctly
-  * For the Craft-CLI to work you need to have your `.env` and `db.php` files setup correctly. If you are using MAMP on mac, you will have to add  a line to both of these files -> You have to add your DB Unix Socket.
+  * For the Craft-CLI to work you need to have your `.env` and `db.php` files setup correctly. If you are using **MAMP** on **mac**, you will have to add a line to both of these files -> You have to add your DB Unix Socket.
   * ### 1. Environment file
     * add this to the end of your `.env` file
     * `DB_SOCKET="/Applications/MAMP/tmp/mysql/mysql.sock"`
@@ -33,3 +33,7 @@ Could be used in a cronjob to update **Craft 3** websites on regular basis as th
 ### 5. Run it
   * Finaly navigate to the folder, where all your websites live and run the script by typing `craft3updater`
 
+### 6. Success
+  * If everything worked and the updates were successful, you should have an **"Updated Craft CMS & Plugins"** commit on your local & remote repository. Make sure to have `composer update` ran on your staging/develop server to ensure all the updates are installed there as well.
+
+## Thank you for using my script, feel free to make any tweaks to it so it suits your own needs.
