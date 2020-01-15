@@ -8,27 +8,27 @@ Could be used in a cronjob to update **Craft 3** websites on regular basis as th
 ## Instructions:
 
 ### 1. Make sure to have Craft3 setup correctly
-  * For the Craft-CLI to work you need to have your `.env` and `db.php` files setup correctly. If you are using **MAMP** on **mac**, you will have to add a line to both of these files -> You have to add your DB Unix Socket.
+  * For the Craft-CLI to work you need to have your `.env` and `db.php` files setup correctly. If you are using **MAMP** on **mac**, you will have to add a line to the `.env` file -> You have to add your DB Unix Socket.
   * ### 1. Environment file
     * add this to the end of your `.env` file
     * `DB_SOCKET="/Applications/MAMP/tmp/mysql/mysql.sock"`
   * ### 2. Database config file
-    * add this to the end of the return statement in your `db.php` file
-    * `'unixSocket' => getenv('DB_SOCKET')` - *Dont forget tu put a comma after the penultimate line*
+    * this file is being automatically replaced by the custom `db.php` file which is in the repo, however **if** you need to use your own `db.php` file, just dont copy the one from the **craft3updater** folder, but add this line to your custom file ->
+    * `'unixSocket' => getenv('DB_SOCKET')`
 
-### 2. Place script
-  * Place this script in your `/usr/local/bin/` folder
+### 2. Place the **craft3updater** folder
+  * Place the **craft3updater** folder to your `/usr/local/` folder
 
-### 3. Make it an executable
+### 3. Make the script an executable
   * For this script to run, it needs permisions to be executed, therefore we need to give those by this command:
-    * `chmod u+x /usr/local/bin/craft3updater`
+    * `chmod u+x /usr/local/craft3updater/bin/craft3updater`
 
 ### 4. Add to the PATH
   * For your script to be executable from anywhere whithout the need to write the whole path, you need to export it to your PATH:
   * #### 1. Edit the `.bash_profile` file: 
-    * `sudo nano /Users/*username*/.bash_profile`
+    * `sudo nano /Users/*[username]*/.bash_profile`
   * #### 2. Add your script there:
-    * `export PATH="/usr/local/bin/craft3updater:$PATH"`
+    * `export PATH="/usr/local/craft3updater/bin:$PATH"`
 
 ### 5. Run it
   * Finaly navigate to the folder, where all your websites live and run the script by typing `craft3updater`
