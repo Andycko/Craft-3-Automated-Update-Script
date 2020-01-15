@@ -23,6 +23,6 @@ return [
 
     // Dev environment settings
     'dev' => [
-        'unixSocket' => getenv('DB_SOCKET'),
+        'unixSocket' => '/Applications/MAMP/tmp/mysql/mysql.sock',
     ]
 ];
