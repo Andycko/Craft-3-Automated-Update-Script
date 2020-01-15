@@ -7,19 +7,30 @@ Could be used in a cronjob to update **Craft 3** websites on regular basis as th
 
 ## Instructions:
 
-### 1. Place script
+### 1. Make sure to have Craft3 setup correctly
+  * For the Craft-CLI to work you need to have your `.env` and `db.php` files setup correctly. If you are using MAMP on mac, you will have to add  a line to both of these files -> You have to add your DB Unix Socket.
+  * ### 1. Environment file
+    * add this to the end of your `.env` file
+    * `DB_SOCKET="/Applications/MAMP/tmp/mysql/mysql.sock"`
+  * ### 2. Database config file
+    * add this to the end of the return statement in your `db.php` file
+    * `'unixSocket' => getenv('DB_SOCKET')`
+    * *Dont forget tu put a comma after the penultimate line*
+
+### 2. Place script
   * Place this script in your `/usr/local/bin/` folder
 
-### 2. Make it an executable
+### 3. Make it an executable
   * For this script to run, it needs permisions to be executed, therefore we need to give those by this command:
     * `chmod u+x /usr/local/bin/craft3updater`
 
-### 3. Add to the PATH
+### 4. Add to the PATH
   * For your script to be executable from anywhere whithout the need to write the whole path, you need to export it to your PATH:
   * #### 1. Edit the `.bash_profile` file: 
     * `sudo nano /Users/*username*/.bash_profile`
   * #### 2. Add your script there:
     * `export PATH="/usr/local/bin/craft3updater:$PATH"`
 
-### 4. Run it
+### 5. Run it
   * Finaly navigate to the folder, where all your websites live and run the script by typing `craft3updater`
+
