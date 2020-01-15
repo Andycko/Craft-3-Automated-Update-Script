@@ -14,8 +14,7 @@ Could be used in a cronjob to update **Craft 3** websites on regular basis as th
     * `DB_SOCKET="/Applications/MAMP/tmp/mysql/mysql.sock"`
   * ### 2. Database config file
     * add this to the end of the return statement in your `db.php` file
-    * `'unixSocket' => getenv('DB_SOCKET')`
-    * *Dont forget tu put a comma after the penultimate line*
+    * `'unixSocket' => getenv('DB_SOCKET')` - *Dont forget tu put a comma after the penultimate line*
 
 ### 2. Place script
   * Place this script in your `/usr/local/bin/` folder
