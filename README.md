@@ -36,4 +36,4 @@ Could be used in a cronjob to update **Craft 3** websites on regular basis as th
 ### 6. Success
   * If everything worked and the updates were successful, you should have an **"Updated Craft CMS & Plugins"** commit on your local & remote repository. Make sure to have `composer update` ran on your staging/develop server to ensure all the updates are installed there as well.
 
-## Thank you for using my script, feel free to make any tweaks to it so it suits your own needs.
+### Thank you for checking out this repo, feel free to make any tweaks to the script so it suits your own needs.
