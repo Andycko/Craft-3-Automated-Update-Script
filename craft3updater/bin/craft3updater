@@ -1,10 +1,10 @@
 # !/bin/bash
 
 # get script directory
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+# SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && cd ../log && pwd )
 
 # save logfile path and append timestamp to logfile
-LOG=$SCRIPT_DIR/out.log
+LOG=$(pwd)/updater.log.out
 echo "" >> $LOG
 echo "============================" >> $LOG
 echo "[$(date)]" >> $LOG
