@@ -13,16 +13,16 @@ echo "[$(date)]" >> $LOG
 PARENT=$(pwd)/*
 
 # looping through the parent directory to see all subdirectories
-for directory in $PARENT
-do
+for directory in $PARENT; do
     DIR=$(basename "$directory")
 
     # continue if log file reached
     if [[ $DIR == "updater.log.out" ]]; then continue; fi
 
     # Check if entry is a directory
-    if ! [ -d "$directory" ]; then
+    if ! [[ -d "$directory" ]]; then
         echo "\"$DIR\" is not a directory, skipping entry."
+        echo ""
         continue
     fi  
     cd "$directory"
@@ -30,6 +30,7 @@ do
     # Check if entry is a craft project
     if ! [ -f "craft" ]; then
         echo "\"$DIR\" is not a Craft CMS application, skipping entry."
+        echo ""
         continue
     fi
 
@@ -37,8 +38,21 @@ do
     read -p "Update \"$DIR\"? [yes|no]: " UPDATE
     if ! ( [[ $UPDATE == "yes" ]] || [[ $UPDATE == "y" ]] ); then
         echo "Skipping entry \"$DIR\"."
+        echo ""
         continue
     fi
+
+    # Check if git working tree is clean
+    TMP=`git status -s`
+    if ! [ -z "$TMP" ]; then
+        echo "Working tree is not clean, please save work before updating."
+        read -p "Ready to continue or skip? [continue|skip]: " TMP
+        if [[ TMP == "skip" ]] || [[ TMP == "s" ]]; then
+            echo ""
+            continue
+        fi
+    fi
+
     echo "Updating entry \"$DIR\"."
 
     # check if git branch is master, if yes give warning & terminate
