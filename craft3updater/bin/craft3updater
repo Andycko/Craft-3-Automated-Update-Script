@@ -70,35 +70,35 @@ for directory in $PARENT; do
         echo "The entered branch does not exist."
     done
 
-    echo -ne "\r[#______]" # progress progress bar
+    echo -ne "\r[=>      ] - Updating git repo               " # progress progress bar
 
     git pull >> $LOG 2>> $LOG
     
-    echo -ne "\r[##_____]" # progress progress bar
+    echo -ne "\r[==>     ] - Installing composer dependencies" # progress progress bar
 
     # composer install without any output and user interactions
     composer install >> $LOG 2>> $LOG
 
-    echo -ne "\r[###____]" # progress progress bar
+    echo -ne "\r[===>    ] - Updating plugins & CMS          " # progress progress bar
 
-    while ./craft update | grep - 2> /dev/null ; do 
+    while ./craft update | grep - > /dev/null 2> /dev/null ; do 
         ./craft update/update all -f --backup 0 --interactive 0 >> $LOG 2>> $LOG;
     done
 
-    echo -ne "\r[####___]" # progress progress bar
+    echo -ne "\r[====>   ] - Adding changes to git           " # progress progress bar
 
     # add updated files
     git add . >> $LOG 2>> $LOG
 
-    echo -ne "\r[#####_]" # progress progress bar
+    echo -ne "\r[=====> ] - Commiting changes to git         " # progress progress bar
 
     git commit -m "Updated Craft CMS & Plugins" >> $LOG 2>> $LOG
 
-    echo -ne "\r[######_]" # progress progress bar
+    echo -ne "\r[======> ] - Pushing changes to git          " # progress progress bar
 
     if git push >> $LOG 2>> $LOG; then
 
-        echo -ne "\r[#######]" # progress progress bar
+        echo -ne "\r[=======>] - Update Done.                " # progress progress bar
 
         echo ""
         echo "******************************"
