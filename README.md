@@ -26,4 +26,6 @@ Could be used in a cronjob to update **Craft 3** websites on regular basis as th
 ### 6. Success
   * If everything worked and the updates were successful, you should have an **"Updated Craft CMS & Plugins"** commit on your local & remote repository. Make sure to have `composer update` ran on your staging/develop server to ensure all the updates are installed there as well.
 
+### 7. Debugging
+  * The updater now creates a `updater.log.out` log file in the folder it is run. It consists a timestamp for every webpage that it updates and the complete output from all commands that are run during the updating process.
 ### Thank you for checking out this repo, feel free to make any tweaks to the script so it suits your own needs.
