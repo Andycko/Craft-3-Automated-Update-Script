@@ -15,13 +15,17 @@ PARENT=$(pwd)/*
 # looping through the parent directory to see all subdirectories
 for directory in $PARENT
 do
-    DIR=$(basename $directory)
+    DIR=$(basename "$directory")
+
+    # continue if log file reached
+    if [[ $DIR == "updater.log.out" ]]; then continue; fi
+
     # Check if entry is a directory
-    if ! [[ -d "$DIR" ]]; then
+    if ! [ -d "$directory" ]; then
         echo "\"$DIR\" is not a directory, skipping entry."
         continue
     fi  
-    cd $DIR
+    cd "$directory"
 
     # Check if entry is a craft project
     if ! [ -f "craft" ]; then
