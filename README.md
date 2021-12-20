@@ -6,16 +6,6 @@ This also takes care about GIT (fetch, merge, commit, push), therefore a local &
 Could be used in a cronjob to update **Craft 3** websites on regular basis as the Craft & Plugin updates are coming out pretty often.
 
 ## Instructions:
-
-### 1. Make sure to have Craft3 setup correctly
-  * For the Craft-CLI to work you need to have your `.env` and `db.php` files setup correctly. If you are using **MAMP** on **mac**, you will have to add a line to the `.env` file -> You have to add your DB Unix Socket.
-  * ### 1. Environment file
-    * add this to the end of your `.env` file
-    * `DB_SOCKET="/Applications/MAMP/tmp/mysql/mysql.sock"`
-  * ### 2. Database config file
-    * this file is being automatically replaced by the custom `db.php` file which is in the repo, however **if** you need to use your own `db.php` file, just dont copy the one from the **craft3updater** folder, but add this line to your custom file ->
-    * `'unixSocket' => getenv('DB_SOCKET')`
-
 ### 2. Place the **craft3updater** folder
   * Place the **craft3updater** folder to your `/usr/local/` folder
 
