@@ -1,5 +1,14 @@
 # !/bin/bash
 
+# get script directory
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+# save logfile path and append timestamp to logfile
+LOG=$SCRIPT_DIR/out.log
+echo "" >> $LOG
+echo "============================" >> $LOG
+echo "[$(date)]" >> $LOG
+
 # directory where all websites are located
 PARENT=$(pwd)/*
 
@@ -7,50 +16,83 @@ PARENT=$(pwd)/*
 for directory in $PARENT
 do
     DIR=$(basename $directory)
-    cd $directory     
-    # replacing db.php file with a custom db.php with added unixSocket for dev environment
-    cp -f /usr/local/craft3updater/db.php config/db.php
-    # check if git branch is master, if yes give warning & terminate
-    BRANCH=$(git rev-parse --abbrev-ref HEAD)
-    if [ $BRANCH = "master" ]; then
-        echo "$DIR"
-        echo " ------------------------------------------------------------------------------"
-        echo "| You are currently on the MASTER branch, consider changing to develop/staging |"
-        echo " ------------------------------------------------------------------------------"
-        echo ""
-    else
-        git pull
-        # composer install without any output and user interactions
-        composer.phar install -n -q
-        composer.phar update -n -q
-        if ./craft update/update all -f --backup 0 --interactive 0; then
-            # adding only files that change after an update, so this commit does not affect anything else
-            git add composer.json
-            git add composer.lock
-            git add config/db.php
-            git commit -m "Updated Craft CMS & Plugins"
-            if git push; then
-                echo ""
-                echo "******************************"
-                echo "  ${DIR} is updated"
-                echo "******************************"
-                echo ""
-                echo ""
-            else
-                echo ""
-                echo " -------------------"
-                echo "|  GIT PUSH failed  |"
-                echo " -------------------"
-                echo ""
-            fi
-        else
-            echo ""
-            echo " -----------------------"
-            echo "|  CRAFT UPDATE failed  |"
-            echo " -----------------------"
-            echo ""
-        fi 
+    # Check if entry is a directory
+    if ! [[ -d "$DIR" ]]; then
+        echo "\"$DIR\" is not a directory, skipping entry."
+        continue
+    fi  
+    cd $DIR
+
+    # Check if entry is a craft project
+    if ! [ -f "craft" ]; then
+        echo "\"$DIR\" is not a Craft CMS application, skipping entry."
+        continue
     fi
 
+    # Ask for confirmation to update entry
+    read -p "Update \"$DIR\"? [yes|no]: " UPDATE
+    if ! ( [[ $UPDATE == "yes" ]] || [[ $UPDATE == "y" ]] ); then
+        echo "Skipping entry \"$DIR\"."
+        continue
+    fi
+    echo "Updating entry \"$DIR\"."
 
+    # check if git branch is master, if yes give warning & terminate
+    git_branch() {
+        git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+    }
+    BRANCHNAME="XXXXXXXXXX"
+    BRANCH=$git_branch
+    while [[ BRANCHNAME != BRANCH ]] ; do
+        read -p "Enter the name of the branch to update: " BRANCHNAME;
+        if git branch | grep -E "\b$BRANCHNAME\b" > /dev/null; then
+            git checkout $BRANCHNAME >> $LOG 2>> $LOG
+            break; 
+        fi
+        echo "The entered branch does not exist."
+    done
+
+    echo -ne "\r[#______]" # progress progress bar
+
+    git pull >> $LOG 2>> $LOG
+    
+    echo -ne "\r[##_____]" # progress progress bar
+
+    # composer install without any output and user interactions
+    composer install >> $LOG 2>> $LOG
+
+    echo -ne "\r[###____]" # progress progress bar
+
+    while ./craft update | grep - 2> /dev/null ; do 
+        ./craft update/update all -f --backup 0 --interactive 0 >> $LOG 2>> $LOG;
+    done
+
+    echo -ne "\r[####___]" # progress progress bar
+
+    # add updated files
+    git add . >> $LOG 2>> $LOG
+
+    echo -ne "\r[#####_]" # progress progress bar
+
+    git commit -m "Updated Craft CMS & Plugins" >> $LOG 2>> $LOG
+
+    echo -ne "\r[######_]" # progress progress bar
+
+    if git push >> $LOG 2>> $LOG; then
+
+        echo -ne "\r[#######]" # progress progress bar
+
+        echo ""
+        echo "******************************"
+        echo "  ${DIR} is updated"
+        echo "******************************"
+        echo ""
+    else
+        echo ""
+        echo " -------------------"
+        echo "|  GIT PUSH failed  |"
+        echo " -------------------"
+        echo ""
+        echo "For more information see script logs in $LOG."
+    fi
 done
