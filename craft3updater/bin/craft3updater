@@ -1,7 +1,27 @@
 # !/bin/bash
 
-# get script directory
-# SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && cd ../log && pwd )
+# print help
+print_help() {
+    echo "
+ __________________________
+< Welcome to Craft3updater >
+ --------------------------
+    \   ^__^
+     \  (oo)\_______
+        (__)\       )\/\\
+            ||----w |
+            ||     ||
+    
+Craft3updater is a command-line tool for updating Craft CMS 3 websites. This tool is not advised to be used with critical updates such as 3.5 -> 3.6. If any help is needed or issues are spotted, feel free to report them at https://github.com/Andycko/Craft-3-Automated-Update-Script/issues .
+
+Usage: craft3updater [<options>] <directory_name>
+Options:
+    -h      Displays this help message
+
+    
+Thanks for using Craft3updater!
+"
+}
 
 # save logfile path and append timestamp to logfile
 LOG=$(pwd)/updater.log.out
@@ -12,8 +32,18 @@ echo "[$(date)]" >> $LOG
 # directory where all websites are located
 PARENT=$(pwd)/*
 
-# looping through the parent directory to see all subdirectories
-for directory in $PARENT; do
+while getopts 'h' flag; do
+    case "${flag}" in
+        h) print_help
+           exit;;
+        *) print_help
+           exit;;
+    esac
+done
+
+# Updates directory that is passed to it as $1
+do_update() {
+    directory=$1
     DIR=$(basename "$directory")
 
     # continue if log file reached
@@ -113,4 +143,14 @@ for directory in $PARENT; do
         echo ""
         echo "For more information see script logs in $LOG."
     fi
-done
+}
+
+if ! [ -z ${@:$OPTIND:1} ]; then
+    # Update only one webpage passed to it as argument
+    do_update ${@:$OPTIND:1}
+else
+    # looping through the parent directory to see all subdirectories
+    for directory in $PARENT; do
+        do_update $directory
+    done
+fi
